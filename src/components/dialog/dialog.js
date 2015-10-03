@@ -648,13 +648,18 @@ function MdDialogProvider($$interimElementProvider) {
         var target = element;
         var sourceElem;
 
+        // Keep track of the element on which the mouse originally went down
+        // so that we can only close the backdrop when the "click" started on it.
+        // A simple 'click' handler does not work,
+        // it sets the target object as the element the mouse went down on
         var mousedownHandler = function(ev) {
-          // Saving the source element for later checking if it was the backdrop
           sourceElem = ev.target;
         };
 
+        // We check if our original element and the target is the backdrop
+        // because if the original was the backdrop and the target was inside the dialog
+        // we don't want to dialog to close
         var mouseupHandler = function(ev) {
-          // Checking if the user clicked the backdrop and released on the backdrop
           if (sourceElem === target[0] && ev.target === target[0]) {
             ev.stopPropagation();
             ev.preventDefault();
@@ -663,7 +668,7 @@ function MdDialogProvider($$interimElementProvider) {
           }
         };
 
-        // Add click listeners
+        // Add listeners
         target.on('mousedown', mousedownHandler);
         target.on('mouseup', mouseupHandler);
 
