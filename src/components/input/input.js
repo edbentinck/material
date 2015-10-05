@@ -404,6 +404,9 @@ function mdMaxlengthDirective($animate) {
       if (!angular.isNumber(maxlength) || maxlength < 0) {
         return true;
       }
+      if (angular.isNumber(modelValue)) {
+        modelValue = modelValue.toString();
+      }
       return ( modelValue || element.val() || viewValue || '' ).length <= maxlength;
     };
 
